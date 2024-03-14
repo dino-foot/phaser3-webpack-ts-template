@@ -1,17 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="./favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css">
-    <title>Casino</title>
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <title>Treasure TV</title>
+  </head>
 
-<body>
+  <body>
+    <script src="src/plugins/webfont.js"></script>
+    <script>
+      WebFont.load({
+        google: {
+          families: ["Droid Sans", "Roboto-Black", "Roboto-Regular", "Roboto-Light", "Roboto-Medium", "Roboto-Bold"],
+        },
+        custom: {
+          families: ["aircruiserpunch"],
+        },
+      });
+    </script>
+
     <div id="app">
-        <div id="game-container"></div>
+      <div id="game-container"></div>
     </div>
     <!-- <script type="module" src="src/main.js"></script> -->
-</body>
+  </body>
 </html>

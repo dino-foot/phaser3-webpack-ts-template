@@ -1,6 +1,10 @@
 import { GameObjects, Scene } from 'phaser';
 import { PhaserHelpers } from '../helpers';
 
+// https://labs.phaser.io/view.html?src=src\scalemanager\fit%20and%20snap.js&v=3.80.1
+// https://labs.phaser.io/edit.html?src=src\game%20objects\text\text%20gradient.js
+// https://labs.phaser.io/edit.html?src=src/display\tint\rainbow%20text.js
+
 export class Game extends Scene
 {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -38,16 +42,21 @@ export class Game extends Scene
     }
 
     private createLowerBox() {
+        let text;
+        text = PhaserHelpers.addText(this.getTextSettings('10,000', 0, 10), this);
         const prizePool = this.add.image(0, 0, 'prize-pool').setOrigin(0.5).setDepth(2).setScale(0.15);
         this.prizePoolContainer = PhaserHelpers.createContainer(this, 300, 320, true);
         this.prizePoolContainer.setDepth(2);
         this.prizePoolContainer.add(prizePool);
+        this.prizePoolContainer.add(text);
         Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, -210, 0);
 
+        text = PhaserHelpers.addText(this.getTextSettings('10,000', 0, 10), this);
         const nextRound = this.add.image(0, 0, 'next-round').setOrigin(0.5).setDepth(2).setScale(0.15);
         this.nextRoundContainer = PhaserHelpers.createContainer(this, 300, 320, true);
         this.nextRoundContainer.setDepth(2);
         this.nextRoundContainer.add(nextRound);
+        this.nextRoundContainer.add(text);
         Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, -170, 0);
     }
 
@@ -70,4 +79,24 @@ export class Game extends Scene
         const mask = maskRect.createGeometryMask();
         this.demoVideo.setMask(mask);
     }
+
+    private getTextSettings (text, x, y) {
+        return {
+            text: text,
+            x: x,
+            y: y,
+            origin: {
+                x: 0.5,
+                y: 0.5,
+            },
+            style: {
+                fontFamily: 'Roboto-Medium',
+                fontSize: 50,
+                color: '#ffffff',
+                // backgroundColor: '#ff00ff',
+            },
+            depth: 2,
+            isInterActive: true,
+        };
+      };
 }
