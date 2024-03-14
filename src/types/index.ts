@@ -62,23 +62,23 @@ export interface RectData extends ItemData {
 }
 
 export interface ImageButtonConfig {
-    angle: number;
     id?: string;
     x: number;
     y: number;
+    angle?: number;
     depth?: number;
     scaleX?: number;
     scaleY?: number;
+    scale?: number;
     frames: {
         texture: string;
-        up: string;
+        up?: string;
         over?: string;
-        down?: string;
+        down?: string ;
         disabled?: string;
         highlightedUp?: string;
         highlightedOver?: string;
         highlightedDown?: string;
-        angle?: number;
     };
     hitArea?: {
         x: number;

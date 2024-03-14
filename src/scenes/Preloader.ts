@@ -60,6 +60,8 @@ export class Preloader extends Scene {
 
         this.load.image('next-round', 'others/next-round.png');
         this.load.image('prize-pool', 'others/prize-pool.png');
+        this.load.image('enter-now-normal', 'others/enter-now-normal.png');
+        this.load.image('enter-now-overlay', 'others/enter-now-overlay.png');
 
         // load demo video
         this.load.video('demo-video', 'videos/demo-video.mp4', true);

@@ -1,5 +1,6 @@
 import { GameObjects, Scene } from 'phaser';
 import { PhaserHelpers } from '../helpers';
+import { ImageButton } from '../helpers/ImageButton';
 
 // https://labs.phaser.io/view.html?src=src\scalemanager\fit%20and%20snap.js&v=3.80.1
 // https://labs.phaser.io/edit.html?src=src\game%20objects\text\text%20gradient.js
@@ -39,11 +40,16 @@ export class Game extends Scene
         this.createLowerBox();
         
         this.embedVideo();
+
+        const enterNowConfig = {id: 'enter-now-normal', x: 0, y: 0, depth: 4, scale: 0.125, frames: { texture: 'enter-now-normal', up: 'enter-now-normal', over: 'enter-now-overlay', down: 'enter-now-overlay' }, scaleX: 0.7, scaleY: 0.7};
+        const enterNowButton = new ImageButton(this, enterNowConfig, this.handleEnterNowButton);
+        enterNowButton.setOrigin(0.5);
+        Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 0, 540);
     }
 
     private createLowerBox() {
         let text;
-        text = PhaserHelpers.addText(this.getTextSettings('10,000', 0, 10), this);
+        text = PhaserHelpers.addText(this.getTextSettings('99,000', 0, 10), this);
         const prizePool = this.add.image(0, 0, 'prize-pool').setOrigin(0.5).setDepth(2).setScale(0.15);
         this.prizePoolContainer = PhaserHelpers.createContainer(this, 300, 320, true);
         this.prizePoolContainer.setDepth(2);
@@ -98,5 +104,9 @@ export class Game extends Scene
             depth: 2,
             isInterActive: true,
         };
-      };
+    };
+
+    handleEnterNowButton(){
+        console.log('enter-now');
+    }
 }
