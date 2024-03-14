@@ -6,25 +6,27 @@ import { ImageButton } from '../helpers/ImageButton';
 // https://labs.phaser.io/edit.html?src=src\game%20objects\text\text%20gradient.js
 // https://labs.phaser.io/edit.html?src=src/display\tint\rainbow%20text.js
 
-export class Game extends Scene
-{
+export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     bottomPanel: GameObjects.Image;
     frame: Phaser.GameObjects.Image;
     prizePoolContainer: GameObjects.Container;
     nextRoundContainer: GameObjects.Container;
-    demoVideo : GameObjects.Video;
+    demoVideo: GameObjects.Video;
     // msg_text : Phaser.GameObjects.Text;
 
-    constructor ()
-    {
+    constructor() {
         super('Game');
     }
 
-    create ()
-    {
+    create() {
         this.camera = this.cameras.main;
+        // Calculate scale factor based on aspect ratio
+
+        this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+        this.scale.refresh();
+        
         this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'bg-with-side-panel');
         this.background.setOrigin(0.5);
 
@@ -38,10 +40,10 @@ export class Game extends Scene
         this.frame.setOrigin(0.5);
 
         this.createLowerBox();
-        
+
         this.embedVideo();
 
-        const enterNowConfig = {id: 'enter-now-normal', x: 0, y: 0, depth: 4, scale: 0.125, frames: { texture: 'enter-now-normal', up: 'enter-now-normal', over: 'enter-now-overlay', down: 'enter-now-overlay' }, scaleX: 0.7, scaleY: 0.7};
+        const enterNowConfig = { id: 'enter-now-normal', x: 0, y: 0, depth: 4, scale: 0.125, frames: { texture: 'enter-now-normal', up: 'enter-now-normal', over: 'enter-now-overlay', down: 'enter-now-overlay' }, scaleX: 0.7, scaleY: 0.7 };
         const enterNowButton = new ImageButton(this, enterNowConfig, this.handleEnterNowButton);
         enterNowButton.setOrigin(0.5);
         Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 0, 540);
@@ -86,7 +88,7 @@ export class Game extends Scene
         this.demoVideo.setMask(mask);
     }
 
-    private getTextSettings (text, x, y) {
+    private getTextSettings(text, x, y) {
         return {
             text: text,
             x: x,
@@ -106,7 +108,7 @@ export class Game extends Scene
         };
     };
 
-    handleEnterNowButton(){
+    handleEnterNowButton() {
         console.log('enter-now');
     }
 }

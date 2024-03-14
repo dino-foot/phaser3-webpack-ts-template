@@ -17,15 +17,17 @@ const config: Types.Core.GameConfig = {
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        // width: 240,
-        // height: 160,
         // min: {
-        //     width: 240,
-        //     height: 160
+        //     width: 960,
+        //     height: 540
+        // },
+        // max: {
+        //     width: 1920,
+        //     height: 1080
         // },
         // snap: {
-        //     width: 240,
-        //     height: 160
+        //     width: 960,
+        //     height: 540
         // }
     },
     scene: [
