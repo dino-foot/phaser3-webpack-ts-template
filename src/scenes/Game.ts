@@ -2,15 +2,13 @@ import { GameObjects, Scene } from 'phaser';
 import { PhaserHelpers } from '../helpers';
 import { ImageButton } from '../helpers/ImageButton';
 
-// https://labs.phaser.io/view.html?src=src\scalemanager\fit%20and%20snap.js&v=3.80.1
-// https://labs.phaser.io/edit.html?src=src\game%20objects\text\text%20gradient.js
-// https://labs.phaser.io/edit.html?src=src/display\tint\rainbow%20text.js
-
 export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     bottomPanel: GameObjects.Image;
     frame: Phaser.GameObjects.Image;
+    shieldLeft: Phaser.GameObjects.Image;
+    shieldRight: Phaser.GameObjects.Image;
     prizePoolContainer: GameObjects.Container;
     nextRoundContainer: GameObjects.Container;
     demoVideo: GameObjects.Video;
@@ -20,24 +18,30 @@ export class Game extends Scene {
         super('Game');
     }
 
+    init() {
+        // console.log(this.sys.game.device.os);
+    }
+
     create() {
         this.camera = this.cameras.main;
         // Calculate scale factor based on aspect ratio
 
-        this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
-        this.scale.refresh();
-        
-        this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'bg-with-side-panel');
-        this.background.setOrigin(0.5);
+        this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'bg-with-side-panel').setOrigin(0.5);
+        this.background.setDepth(0);
 
         this.bottomPanel = this.add.image(0, 0, 'bottom-panel').setDepth(3);
         Phaser.Display.Align.In.BottomCenter(this.bottomPanel, this.background);
 
+        //? overlay
         // const overlay = this.add.image(this.camera.centerX, this.camera.centerY, 'overlay').setAlpha(0.5);
         // overlay.setDepth(10);
 
+        // background element
         this.frame = this.add.image(this.camera.centerX, this.camera.centerY - 65, 'video-frame').setDepth(4);
         this.frame.setOrigin(0.5);
+
+        // this.shieldLeft = this.add.image(0, 0, 'shield').setOrigin(0.5).setDepth(1).setScale(0.75);
+        // Phaser.Display.Align.In.LeftCenter(this.shieldLeft, this.background);
 
         this.createLowerBox();
 
@@ -47,6 +51,14 @@ export class Game extends Scene {
         const enterNowButton = new ImageButton(this, enterNowConfig, this.handleEnterNowButton);
         enterNowButton.setOrigin(0.5);
         Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 0, 540);
+
+        // orientation change event 
+        // EventsController.onOrientationchange(this.checkOriention, this);
+        this.scale.on('orientationchange', this.checkOriention, this);
+        this.checkOriention(this.scale.orientation);
+
+        // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+        // this.scale.refresh();
     }
 
     private createLowerBox() {
@@ -88,6 +100,35 @@ export class Game extends Scene {
         this.demoVideo.setMask(mask);
     }
 
+    handleEnterNowButton() {
+        console.log('enter-now');
+    }
+
+    checkOriention(orientation) {
+        // console.log('changed');
+        if (orientation === Phaser.Scale.PORTRAIT) {
+            // todo change sprite
+            console.log('portrait');
+        }
+        else if (orientation === Phaser.Scale.LANDSCAPE) {
+            // todo change sprite
+            console.log('landscape', this);
+
+            if (this.sys.game.device.os.desktop === false) {
+                // this.background.setTexture('mobile-bg')
+        
+                Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 20, -220);
+                Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 20, -220);
+            
+                // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+                // this.scale.refresh();
+
+                // this.frame.setDisplaySize(1500, this.frame.displayHeight);
+                // this.demoVideo.setDisplaySize(this.frame.width, this.frame.height)
+            }
+        }
+    }
+
     private getTextSettings(text, x, y) {
         return {
             text: text,
@@ -107,8 +148,4 @@ export class Game extends Scene {
             isInterActive: true,
         };
     };
-
-    handleEnterNowButton() {
-        console.log('enter-now');
-    }
 }
