@@ -54,9 +54,11 @@ export class Preloader extends Scene {
 
         this.load.image('background', 'bg.png');
         this.load.image('bg-with-side-panel', 'bg-with-side-panel.png');
+        this.load.image('mobile-frame', 'mobile-frame.png');
         this.load.image('video-frame', 'frame.png');
         this.load.image('overlay', 'overlay.png');
         this.load.image('bottom-panel', 'bottom-panel.png');
+        this.load.image('shield', 'shield.png');
 
         this.load.image('next-round', 'others/next-round.png');
         this.load.image('prize-pool', 'others/prize-pool.png');
