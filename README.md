@@ -12,18 +12,16 @@ This template has been updated for:
 - [Webpack 5.90.3](https://github.com/webpack/webpack)
 - [TypeScript 5.3.3](https://github.com/microsoft/TypeScript)
 
-![screenshot](screenshot.png)
-
 ## Requirements
 
 [Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
 
 ## Available Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm run dev` | Launch a development web server |
+| Command         | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `npm install`   | Install project dependencies                   |
+| `npm run dev`   | Launch a development web server                |
 | `npm run build` | Create a production build in the `dist` folder |
 
 ## Writing Code
@@ -53,21 +51,21 @@ Webpack supports loading assets via JavaScript module `import` statements.
 This template provides support for both embedding assets and also loading them from a static folder. To embed an asset, you can import it at the top of the JavaScript file you are using it in:
 
 ```js
-import logoImg from './assets/logo.png'
+import logoImg from "./assets/logo.png";
 ```
 
 To load static files such as audio files, videos, etc place them into the `public/assets` folder. Then you can use this path in the Loader calls within Phaser:
 
 ```js
-preload ()
+preload();
 {
-    //  This is an example of an imported bundled image.
-    //  Remember to import it at the top of this file
-    this.load.image('logo', logoImg);
+  //  This is an example of an imported bundled image.
+  //  Remember to import it at the top of this file
+  this.load.image("logo", logoImg);
 
-    //  This is an example of loading a static image
-    //  from the public/assets folder:
-    this.load.image('background', 'assets/bg.png');
+  //  This is an example of loading a static image
+  //  from the public/assets folder:
+  this.load.image("background", "assets/bg.png");
 }
 ```
 
@@ -77,7 +75,7 @@ When you issue the `npm run build` command, all static assets are automatically 
 
 After you run the `npm run build` command, your code will be built into a single bundle and saved to the `dist` folder, along with any other assets your project imported, or stored in the public assets folder.
 
-In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
+In order to deploy your game, you will need to upload _all_ of the contents of the `dist` folder to a public facing web server.
 
 ## Customizing the Template
 
@@ -85,13 +83,13 @@ In order to deploy your game, you will need to upload *all* of the contents of t
 
 You can write modern ES6+ JavaScript and Babel will transpile it to a version of JavaScript that you want your project to support. The targeted browsers are set in the `.babelrc` file and the default currently targets all browsers with total usage over "0.25%" but excludes IE11 and Opera Mini.
 
- ```
+```
 "browsers": [
-  ">0.25%",
-  "not ie 11",
-  "not op_mini all"
+ ">0.25%",
+ "not ie 11",
+ "not op_mini all"
 ]
- ```
+```
 
 ### Webpack
 
