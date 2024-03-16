@@ -12,6 +12,8 @@ export class Game extends Scene {
     prizePoolContainer: GameObjects.Container;
     nextRoundContainer: GameObjects.Container;
     demoVideo: GameObjects.Video;
+    isDeskTop: boolean;
+    isLandscape: boolean; // landscape-primary
     // msg_text : Phaser.GameObjects.Text;
 
     constructor() {
@@ -19,7 +21,12 @@ export class Game extends Scene {
     }
 
     init() {
-        // console.log(this.sys.game.device.os);
+        this.isDeskTop = this.sys.game.device.os.desktop;
+        this.isLandscape = this.scale.orientation.toString() === Phaser.Scale.LANDSCAPE ? true : false;
+        this.scale.on('orientationchange', this.checkOriention, this);
+
+        console.log('isDesktop >> ', this.isDeskTop);
+        console.log('isLandscape >> ', this.isLandscape);
     }
 
     create() {
@@ -53,9 +60,7 @@ export class Game extends Scene {
         Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 0, 540);
 
         // orientation change event 
-        // EventsController.onOrientationchange(this.checkOriention, this);
-        this.scale.on('orientationchange', this.checkOriention, this);
-        this.checkOriention(this.scale.orientation);
+       // this.checkOriention(this.scale.orientation);
 
         // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
         // this.scale.refresh();
@@ -105,28 +110,35 @@ export class Game extends Scene {
     }
 
     checkOriention(orientation) {
-        // console.log('changed');
+    
         if (orientation === Phaser.Scale.PORTRAIT) {
             // todo change sprite
-            console.log('portrait');
+            this.isLandscape = false;
+            console.log('portrait', this.isLandscape);
         }
         else if (orientation === Phaser.Scale.LANDSCAPE) {
             // todo change sprite
-            console.log('landscape', this);
+            this.isLandscape = true;
+            // console.log('landscape', this.isLandscape);
 
-            if (this.sys.game.device.os.desktop === false) {
-                // this.background.setTexture('mobile-bg')
+            // if (this.sys.game.device.os.desktop === false) {
+            //     this.background.setTexture('background')
         
-                Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 20, -220);
-                Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 20, -220);
-            
-                // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
-                // this.scale.refresh();
+            //     Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 20, -220);
+            //     Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 20, -220);
 
-                // this.frame.setDisplaySize(1500, this.frame.displayHeight);
-                // this.demoVideo.setDisplaySize(this.frame.width, this.frame.height)
-            }
+            //     this.frame.setDisplaySize(1400, this.frame.displayHeight);
+            //     this.demoVideo.setDisplaySize(this.frame.displayWidth, this.frame.displayHeight)
+                
+
+            //     this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+            //     this.scale.refresh();
+            // }
         }
+
+        console.log('isDesktop >> ', this.isDeskTop);
+        console.log('isLandscape >> ', this.isLandscape);
+        
     }
 
     private getTextSettings(text, x, y) {
