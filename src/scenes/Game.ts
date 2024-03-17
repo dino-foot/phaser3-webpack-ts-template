@@ -16,6 +16,7 @@ export class Game extends Scene {
     demoVideo: GameObjects.Video;
     isDeskTop: boolean;
     isLandscape: boolean;
+    currentOrienation: Scale.Orientation;
     gamewidth: number;
     gameHeight: number;
 
@@ -26,6 +27,7 @@ export class Game extends Scene {
     init() {
         this.isDeskTop = this.sys.game.device.os.desktop;
         this.isLandscape = this.scale.orientation === Scale.Orientation.LANDSCAPE;
+        this.currentOrienation = this.scale.orientation;
 
         this.scale.on('orientationchange', this.checkOrientation, this);
         this.scale.on('resize', this.onResize, this);
@@ -33,8 +35,8 @@ export class Game extends Scene {
         this.gamewidth = Number(this.game.config.width);
         this.gameHeight = Number(this.game.config.height);
         
-        console.log('isDesktop >> ', this.isDeskTop);
-        console.log('isLandscape >> ', this.isLandscape);
+        // console.log('isDesktop >> ', this.isDeskTop);
+        // console.log('isLandscape >> ', this.isLandscape);
 
         // update game size for portrait mode
         this.updateGameSize();
@@ -53,18 +55,25 @@ export class Game extends Scene {
     create() {
         this.camera = this.cameras.main;
         
-        const bgSpriteKey = (this.isDeskTop || this.isLandscape) ? 'desktopBg' : 'mobileBg';
-        this.background = this.add.image(this.camera.centerX, this.camera.centerY, bgSpriteKey).setOrigin(0.5).setDepth(0);
-        Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
+        this.createBackground();
+        this.createFrame();
 
+        // this.createLowerBox();
+        // this.embedVideo();
+        // this.createButtons();
+        this.checkOrientation(this.scale.orientation);
+    }
+
+    private createFrame() {
         const frameKey = this.isLandscape ? 'video-frame' : 'mobile-frame';
         const offsetY = this.isLandscape ? -65 : 185;
         this.frame = this.add.image(this.camera.centerX, this.camera.centerY + offsetY, frameKey).setOrigin(0.5).setDepth(4);
+    }
 
-        this.createLowerBox();
-        this.embedVideo();
-        this.createButtons();
-        this.checkOrientation(this.scale.orientation);
+    private createBackground() {
+        const bgSpriteKey = (this.isDeskTop || this.isLandscape) ? 'desktopBg' : 'mobileBg';
+        this.background = this.add.image(this.camera.centerX, this.camera.centerY, bgSpriteKey).setOrigin(0.5).setDepth(0);
+        Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
     }
 
     private createButtons() {
@@ -102,33 +111,52 @@ export class Game extends Scene {
 
     checkOrientation(orientation) {
         this.isLandscape = orientation === Scale.Orientation.LANDSCAPE;
-        this.updateGameSize();
+
+        if(this.currentOrienation !== orientation){
+            this.currentOrienation = this.scale.orientation;
+            this.updateGameSize();
+            this.scale.refresh();
+            
+            // redraw 
+            this.cleanupLayout();
+            this.createBackground();
+            this.createFrame();
+        }
+        
         console.log('orienation ', this.isLandscape);
+        
+        // const bgSpriteKey = (this.isDeskTop || this.isLandscape) ? 'desktopBg' : 'mobileBg';
+        // const frameKey = this.isLandscape ? 'video-frame' : 'mobile-frame';
+        // const frameOffsetY = this.isLandscape ? -65 : 185;
 
-        const bgSpriteKey = (this.isDeskTop || this.isLandscape) ? 'desktopBg' : 'mobileBg';
-        const frameKey = this.isLandscape ? 'video-frame' : 'mobile-frame';
-        const frameOffsetY = this.isLandscape ? -65 : 185;
-
-        this.frame.setTexture(frameKey);
-        this.frame.setY(this.camera.centerY + frameOffsetY);
-        this.background.setTexture(bgSpriteKey);
+        // this.frame.setTexture(frameKey);
+        // this.frame.setY(this.camera.centerY + frameOffsetY);
+        // this.background.setTexture(bgSpriteKey);
 
         if (!this.isDeskTop && this.isLandscape) {
             // console.log('landscape');
-            this.prizePoolContainer.setScale(0.75);
-            this.nextRoundContainer.setScale(0.75);
-            Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 30, -220);
-            Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 50, -220);
+            // this.prizePoolContainer.setScale(0.75);
+            // this.nextRoundContainer.setScale(0.75);
+            // Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 30, -220);
+            // Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 50, -220);
         } else {
             // console.log('portrait');
-            this.prizePoolContainer.setScale(0.75).setDepth(4);
-            this.nextRoundContainer.setScale(0.75).setDepth(4);
-            Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, 10, 210);
-            Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, 0, 210);
+            // this.prizePoolContainer.setScale(0.75).setDepth(4);
+            // this.nextRoundContainer.setScale(0.75).setDepth(4);
+            // Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, 10, 210);
+            // Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, 0, 210);
         }
 
         
         this.scale.refresh();
+    }
+
+    private cleanupLayout() {
+        this.background?.destroy();
+        this.frame?.destroy();
+        this.prizePoolContainer?.destroy();
+        this.nextRoundContainer?.destroy();
+        this.demoVideo?.destroy();
     }
 
     onResize (gameSize, baseSize, displaySize, resolution)
