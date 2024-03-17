@@ -14,7 +14,6 @@ export class Game extends Scene {
     demoVideo: GameObjects.Video;
     isDeskTop: boolean;
     isLandscape: boolean; // landscape-primary
-    // msg_text : Phaser.GameObjects.Text;
 
     constructor() {
         super('Game');
@@ -32,38 +31,38 @@ export class Game extends Scene {
     create() {
         this.camera = this.cameras.main;
         // Calculate scale factor based on aspect ratio
-
-        this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'bg-with-side-panel').setOrigin(0.5);
+        // const bgSpriteKey = this.isDeskTop ? 'desktopBg' : 'desktopBg';
+        this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'desktopBg').setOrigin(0.5);
         this.background.setDepth(0);
 
-        this.bottomPanel = this.add.image(0, 0, 'bottom-panel').setDepth(3);
-        Phaser.Display.Align.In.BottomCenter(this.bottomPanel, this.background);
+        // this.bottomPanel = this.add.image(0, 0, 'bottom-panel').setDepth(3);
+        // Phaser.Display.Align.In.BottomCenter(this.bottomPanel, this.background);
 
-        //? overlay
-        // const overlay = this.add.image(this.camera.centerX, this.camera.centerY, 'overlay').setAlpha(0.5);
-        // overlay.setDepth(10);
+        // // background element
+        // this.frame = this.add.image(this.camera.centerX, this.camera.centerY - 65, 'video-frame').setDepth(4);
+        // this.frame.setOrigin(0.5);
 
-        // background element
-        this.frame = this.add.image(this.camera.centerX, this.camera.centerY - 65, 'video-frame').setDepth(4);
-        this.frame.setOrigin(0.5);
+        // this.createLowerBox();
+        // this.embedVideo();
+        // this.createButtons();
 
-        // this.shieldLeft = this.add.image(0, 0, 'shield').setOrigin(0.5).setDepth(1).setScale(0.75);
-        // Phaser.Display.Align.In.LeftCenter(this.shieldLeft, this.background);
+        // update orientation
+        this.checkOriention(this.scale.orientation);
 
-        this.createLowerBox();
+        // if (!this.isDeskTop) {
+        //     if (this.isLandscape) {
+        //         this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+        //         this.scale.refresh();
+        //     }
+        // }
 
-        this.embedVideo();
+    }
 
+    private createButtons() {
         const enterNowConfig = { id: 'enter-now-normal', x: 0, y: 0, depth: 4, scale: 0.125, frames: { texture: 'enter-now-normal', up: 'enter-now-normal', over: 'enter-now-overlay', down: 'enter-now-overlay' }, scaleX: 0.7, scaleY: 0.7 };
         const enterNowButton = new ImageButton(this, enterNowConfig, this.handleEnterNowButton);
         enterNowButton.setOrigin(0.5);
         Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 0, 540);
-
-        // orientation change event 
-       // this.checkOriention(this.scale.orientation);
-
-        // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
-        // this.scale.refresh();
     }
 
     private createLowerBox() {
@@ -98,6 +97,7 @@ export class Game extends Scene {
             this.demoVideo.setDisplaySize(this.frame.width, this.frame.height).setVisible(true);
         });
 
+        // const offsetX = (!this.isDeskTop && this.isLandscape === true) ? 330 : 330;
         const maskRect = this.add.rectangle(0, 0, this.frame.width - 330, this.frame.height - 200, 0x000000);
         Phaser.Display.Align.In.BottomCenter(maskRect, this.frame, -20);
         maskRect.setVisible(true);
@@ -110,35 +110,32 @@ export class Game extends Scene {
     }
 
     checkOriention(orientation) {
-    
+
         if (orientation === Phaser.Scale.PORTRAIT) {
-            // todo change sprite
             this.isLandscape = false;
-            console.log('portrait', this.isLandscape);
         }
         else if (orientation === Phaser.Scale.LANDSCAPE) {
-            // todo change sprite
             this.isLandscape = true;
-            // console.log('landscape', this.isLandscape);
-
-            // if (this.sys.game.device.os.desktop === false) {
-            //     this.background.setTexture('background')
-        
-            //     Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 20, -220);
-            //     Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 20, -220);
-
-            //     this.frame.setDisplaySize(1400, this.frame.displayHeight);
-            //     this.demoVideo.setDisplaySize(this.frame.displayWidth, this.frame.displayHeight)
-                
-
-            //     this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
-            //     this.scale.refresh();
-            // }
         }
 
-        console.log('isDesktop >> ', this.isDeskTop);
-        console.log('isLandscape >> ', this.isLandscape);
-        
+
+        if (!this.isDeskTop) {
+            if (this.isLandscape) {
+                this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+                this.scale.refresh();
+
+                this.frame.setDisplaySize(1500, this.frame.displayHeight);
+                this.demoVideo.setDisplaySize(this.frame.displayWidth, this.frame.displayHeight);
+                console.log(this.frame.displayWidth / this.frame.displayHeight);
+                
+                Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 10, -220);
+                Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 10, -220);
+               
+            }
+        }
+
+        //     this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+        //     this.scale.refresh();
     }
 
     private getTextSettings(text, x, y) {
