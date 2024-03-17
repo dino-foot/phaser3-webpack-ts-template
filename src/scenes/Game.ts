@@ -138,18 +138,23 @@ export class Game extends Scene {
             this.createButtons();
         }
 
-        if (!this.isDeskTop && this.isLandscape) {
+        if (!this.isDeskTop && this.currentOrienation === Scale.Orientation.LANDSCAPE) {
             // console.log('landscape');
             this.prizePoolContainer.setScale(0.75);
             this.nextRoundContainer.setScale(0.75);
             Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 30, -220);
             Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 50, -220);
-        } else {
+        } else if(!this.isDeskTop && this.currentOrienation === Scale.Orientation.PORTRAIT) {
             // console.log('portrait');
             this.prizePoolContainer.setScale(0.75).setDepth(4);
             this.nextRoundContainer.setScale(0.75).setDepth(4);
             Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, 10, 210);
             Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, 0, 210);
+        }
+        else{
+            // desktop
+            Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, -210, 0);
+            Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, -170, 0);
         }
 
 
@@ -168,7 +173,13 @@ export class Game extends Scene {
         // const width = gameSize.width;
         // const height = gameSize.height;
         // this.cameras.resize(width, height);
-        // console.log('onResize', gameSize);
+        // if (width > height) {
+        //     console.log('Landscape mode');
+        //     // Additional actions for landscape mode
+        // } else {
+        //     console.log('Portrait mode');
+        //     // Additional actions for portrait mode
+        // }
     }
 
     handleEnterNowButton() {
