@@ -39,6 +39,7 @@ export class ImageButton extends Phaser.GameObjects.Image {
             this.setScale(config.scale);
         }
 
+        this.setOrigin(0.5);
         this.addText();
         this.enable();
 

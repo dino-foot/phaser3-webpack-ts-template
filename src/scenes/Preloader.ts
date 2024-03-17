@@ -58,6 +58,11 @@ export class Preloader extends Scene {
         this.load.image('mobileBg', 'mobileBg.png');
         this.load.image('mobile-frame', 'mobileFrame.png');
 
+        this.load.image('minus-normal', 'minus-normal.png');
+        this.load.image('minus-pressed', 'minus-pressed.png');
+        this.load.image('plus-normal', 'plus-normal.png');
+        this.load.image('plus-pressed', 'plus-pressed.png');
+
         this.load.image('next-round', 'others/next-round.png');
         this.load.image('prize-pool', 'others/prize-pool.png');
         this.load.image('enter-now-normal', 'others/enter-now-normal.png');

@@ -30,7 +30,7 @@ export class Game extends Scene {
         this.currentOrienation = this.scale.orientation;
 
         this.scale.on('orientationchange', this.checkOrientation, this);
-        this.scale.on('resize', this.onResize, this);
+        // this.scale.on('resize', this.onResize, this);
 
         this.gamewidth = Number(this.game.config.width);
         this.gameHeight = Number(this.game.config.height);
@@ -78,9 +78,19 @@ export class Game extends Scene {
 
     private createButtons() {
         const enterNowConfig = { id: 'enter-now-normal', x: 0, y: 0, depth: 4, scale: 0.125, frames: { texture: 'enter-now-normal', up: 'enter-now-normal', over: 'enter-now-overlay', down: 'enter-now-overlay' }, scaleX: 0.7, scaleY: 0.7 };
+        const plusBtnConfig = { id: 'plus-normal', x: 0, y: 0, depth: 4, scale: 0.25, frames: { texture: 'plus-normal', up: 'plus-normal', over: 'plus-pressed', down: 'plus-pressed' } };
+        const minusBtnConfig = { id: 'minus-normal', x: 0, y: 0, depth: 4, scale: 0.25, frames: { texture: 'minus-normal', up: 'minus-normal', over: 'minus-pressed', down: 'minus-pressed' } };
+        
+        
         const enterNowButton = new ImageButton(this, enterNowConfig, this.handleEnterNowButton);
-        enterNowButton.setOrigin(0.5);
-        Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 5, 490);
+        const offsetY = (this.isDeskTop || this.isLandscape) ? 540 : 490;
+        Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 5, offsetY);
+
+        const plusBtn = new ImageButton(this, plusBtnConfig, this.handlePlusButton);
+        const minusBtn = new ImageButton(this, minusBtnConfig, this.handleMinusButton);
+
+        Display.Align.In.Center(plusBtn, enterNowButton, enterNowButton.displayWidth/1.5);
+        Display.Align.In.Center(minusBtn, enterNowButton, -enterNowButton.displayWidth/1.5);
     }
 
     private createLowerBox() {
@@ -128,8 +138,6 @@ export class Game extends Scene {
             this.createButtons();
         }
 
-        console.log('orienation ', this.isLandscape);
-
         if (!this.isDeskTop && this.isLandscape) {
             // console.log('landscape');
             this.prizePoolContainer.setScale(0.75);
@@ -165,6 +173,14 @@ export class Game extends Scene {
 
     handleEnterNowButton() {
         console.log('enter-now');
+    }
+
+    handlePlusButton() {
+        console.log('plus');
+    }
+
+    handleMinusButton() {
+        console.log('minus');
     }
 
     private addText(text: string, x: number, y: number) {
