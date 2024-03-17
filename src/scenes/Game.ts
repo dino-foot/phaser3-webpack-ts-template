@@ -50,7 +50,6 @@ export class Game extends Scene {
         this.embedVideo();
         this.createButtons();
 
-        // update orientation
         this.checkOriention(this.scale.orientation);
 
         // if (!this.isDeskTop) {
@@ -104,8 +103,6 @@ export class Game extends Scene {
             // maskRect.setVisible(true);
             const mask = maskRect.createGeometryMask();
             this.demoVideo.setMask(mask);
-            //  Resize the video stream to fit our monitor once the texture has been created
-            // this.demoVideo.setDisplaySize(this.frame.width, this.frame.height).setVisible(true);
         });
 
         // // const offsetX = (!this.isDeskTop && this.isLandscape === true) ? 330 : 330;
@@ -116,32 +113,25 @@ export class Game extends Scene {
     }
 
     checkOriention(orientation) {
-
-        if (orientation === Phaser.Scale.PORTRAIT) {
-            this.isLandscape = false;
-        }
-        else if (orientation === Phaser.Scale.LANDSCAPE) {
-            this.isLandscape = true;
-        }
-
+        this.isLandscape = orientation === Phaser.Scale.LANDSCAPE;
 
         if (!this.isDeskTop) {
             if (this.isLandscape) {
-                this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
-                this.scale.refresh();
+                // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+                // this.scale.refresh();
+                
+                // this.frame.setDisplaySize(1500, this.frame.displayHeight);
+                // this.demoVideo.setDisplaySize(this.frame.displayWidth, this.frame.displayHeight);
+                // console.log(this.frame.displayWidth / this.frame.displayHeight);
 
-                this.frame.setDisplaySize(1500, this.frame.displayHeight);
-                this.demoVideo.setDisplaySize(this.frame.displayWidth, this.frame.displayHeight);
-                console.log(this.frame.displayWidth / this.frame.displayHeight);
-
-                Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 10, -220);
-                Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 10, -220);
+                this.prizePoolContainer.setScale(0.75);
+                this.nextRoundContainer.setScale(0.75);
+                Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 30, -220);
+                Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 50, -220);
+                console.log('orientation changed');
 
             }
         }
-
-        //     this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
-        //     this.scale.refresh();
     }
 
     private getTextSettings(text, x, y) {
