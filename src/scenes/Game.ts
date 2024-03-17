@@ -54,12 +54,10 @@ export class Game extends Scene {
         this.frame = this.add.image(this.camera.centerX, this.camera.centerY + offsetY, frameKey).setDepth(4);
         this.frame.setOrigin(0.5);
 
-
         this.createLowerBox();
         this.embedVideo();
         this.createButtons();
-
-        // this.checkOriention(this.scale.orientation);
+        this.checkOriention(this.scale.orientation);
 
         // if (!this.isDeskTop) {
         //     if (this.isLandscape) {
@@ -106,16 +104,14 @@ export class Game extends Scene {
         this.demoVideo.play(true);
         this.demoVideo.setScale(this.isLandscape ? 0.7 : 0.35);
 
-        // this.demoVideo.once('created', () => {
-        //     console.log(this.demoVideo.displayWidth)
-        //     const maskRect = this.add.rectangle(0, 0, this.demoVideo.displayWidth, this.demoVideo.displayHeight, 0x000000);
-        //     Phaser.Display.Align.In.BottomCenter(maskRect, this.frame, 0, -20);
-        //     // maskRect.setVisible(true);
-        //     const mask = maskRect.createGeometryMask();
-        //     this.demoVideo.setMask(mask);
-        // });
-
-        // // const offsetX = (!this.isDeskTop && this.isLandscape === true) ? 330 : 330;
+        this.demoVideo.once('created', () => {
+            // console.log(this.demoVideo.displayWidth)
+            const maskRect = this.add.rectangle(0, 0, this.demoVideo.displayWidth, this.demoVideo.displayHeight, 0x000000);
+            Phaser.Display.Align.In.BottomCenter(maskRect, this.frame, 0, -20);
+            // maskRect.setVisible(true);
+            const mask = maskRect.createGeometryMask();
+            this.demoVideo.setMask(mask);
+        });
     }
 
     handleEnterNowButton() {
@@ -129,11 +125,6 @@ export class Game extends Scene {
             if (this.isLandscape) {
                 // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
                 // this.scale.refresh();
-
-                // this.frame.setDisplaySize(1500, this.frame.displayHeight);
-                // this.demoVideo.setDisplaySize(this.frame.displayWidth, this.frame.displayHeight);
-                // console.log(this.frame.displayWidth / this.frame.displayHeight);
-
                 this.prizePoolContainer.setScale(0.75);
                 this.nextRoundContainer.setScale(0.75);
                 Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 30, -220);
@@ -142,7 +133,10 @@ export class Game extends Scene {
 
             }
             else {
-                this.background.setTexture('mobileBg');
+                this.prizePoolContainer.setScale(0.75).setDepth(4);
+                this.nextRoundContainer.setScale(0.75).setDepth(4);
+                Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, 10, 210);
+                Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, 0, 210);
             }
         }
     }
