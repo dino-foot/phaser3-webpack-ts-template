@@ -77,7 +77,7 @@ export class Game extends Scene {
     }
 
     private createButtons() {
-        const enterNowConfig = { id: 'enter-now-normal', x: 0, y: 0, depth: 4, scale: 0.125, frames: { texture: 'enter-now-normal', up: 'enter-now-normal', over: 'enter-now-overlay', down: 'enter-now-overlay' }, scaleX: 0.7, scaleY: 0.7 };
+        const enterNowConfig = { id: 'enter-now-normal', x: 0, y: 0, depth: 4, scale: 0.125, frames: { texture: 'enter-now-normal', up: 'enter-now-normal', over: 'enter-now-overlay', down: 'enter-now-overlay' }};
         const plusBtnConfig = { id: 'plus-normal', x: 0, y: 0, depth: 4, scale: 0.25, frames: { texture: 'plus-normal', up: 'plus-normal', over: 'plus-pressed', down: 'plus-pressed' } };
         const minusBtnConfig = { id: 'minus-normal', x: 0, y: 0, depth: 4, scale: 0.25, frames: { texture: 'minus-normal', up: 'minus-normal', over: 'minus-pressed', down: 'minus-pressed' } };
         
