@@ -1,6 +1,7 @@
 import { Scene, Cameras, Display, GameObjects, Scale } from 'phaser';
 import { PhaserHelpers } from '../helpers';
 import { ImageButton } from '../helpers/ImageButton';
+import { EventsController } from '../controllers/eventsController';
 
 export class Game extends Scene {
     camera: Cameras.Scene2D.Camera;
@@ -25,26 +26,41 @@ export class Game extends Scene {
     init() {
         this.isDeskTop = this.sys.game.device.os.desktop;
         this.isLandscape = this.scale.orientation === Scale.Orientation.LANDSCAPE;
+
         this.scale.on('orientationchange', this.checkOrientation, this);
+        this.scale.on('resize', this.onResize, this);
+
         this.gamewidth = Number(this.game.config.width);
         this.gameHeight = Number(this.game.config.height);
         
         console.log('isDesktop >> ', this.isDeskTop);
         console.log('isLandscape >> ', this.isLandscape);
+
+        // update game size for portrait mode
+        this.updateGameSize();
+    }
+
+    private updateGameSize() {
+        if (!this.isLandscape) {
+            this.scale.setGameSize(720, 1600);
+        }
+        else {
+            this.scale.setGameSize(1920, 1080);
+        }
+        this.scale.refresh();
     }
 
     create() {
         this.camera = this.cameras.main;
-        if (!this.isLandscape && !this.isDeskTop) {
-            this.scale.setGameSize(720, 1600);
-            this.scale.refresh();
-        }
+        
         const bgSpriteKey = (this.isDeskTop || this.isLandscape) ? 'desktopBg' : 'mobileBg';
         this.background = this.add.image(this.camera.centerX, this.camera.centerY, bgSpriteKey).setOrigin(0.5).setDepth(0);
         Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
+
         const frameKey = this.isLandscape ? 'video-frame' : 'mobile-frame';
         const offsetY = this.isLandscape ? -65 : 185;
         this.frame = this.add.image(this.camera.centerX, this.camera.centerY + offsetY, frameKey).setOrigin(0.5).setDepth(4);
+
         this.createLowerBox();
         this.embedVideo();
         this.createButtons();
@@ -84,24 +100,47 @@ export class Game extends Scene {
         });
     }
 
-    handleEnterNowButton() {
-        console.log('enter-now');
-    }
-
     checkOrientation(orientation) {
         this.isLandscape = orientation === Scale.Orientation.LANDSCAPE;
+        this.updateGameSize();
+        console.log('orienation ', this.isLandscape);
+
+        const bgSpriteKey = (this.isDeskTop || this.isLandscape) ? 'desktopBg' : 'mobileBg';
+        const frameKey = this.isLandscape ? 'video-frame' : 'mobile-frame';
+        const frameOffsetY = this.isLandscape ? -65 : 185;
+
+        this.frame.setTexture(frameKey);
+        this.frame.setY(this.camera.centerY + frameOffsetY);
+        this.background.setTexture(bgSpriteKey);
+
         if (!this.isDeskTop && this.isLandscape) {
+            // console.log('landscape');
             this.prizePoolContainer.setScale(0.75);
             this.nextRoundContainer.setScale(0.75);
             Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 30, -220);
             Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 50, -220);
-            console.log('orientation changed');
         } else {
+            // console.log('portrait');
             this.prizePoolContainer.setScale(0.75).setDepth(4);
             this.nextRoundContainer.setScale(0.75).setDepth(4);
             Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, 10, 210);
             Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, 0, 210);
         }
+
+        
+        this.scale.refresh();
+    }
+
+    onResize (gameSize, baseSize, displaySize, resolution)
+    {
+        // const width = gameSize.width;
+        // const height = gameSize.height;
+        // this.cameras.resize(width, height);
+        // console.log('onResize', gameSize);
+    }
+
+    handleEnterNowButton() {
+        console.log('enter-now');
     }
 
     private addText(text: string, x: number, y: number) {
