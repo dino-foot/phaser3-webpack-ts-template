@@ -6,14 +6,15 @@ export class Game extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     bottomPanel: GameObjects.Image;
-    frame: Phaser.GameObjects.Image;
+    frame: GameObjects.Image;
+    mobileLogo: GameObjects.Image;
     shieldLeft: Phaser.GameObjects.Image;
     shieldRight: Phaser.GameObjects.Image;
     prizePoolContainer: GameObjects.Container;
     nextRoundContainer: GameObjects.Container;
     demoVideo: GameObjects.Video;
     isDeskTop: boolean;
-    isLandscape: boolean; // landscape-primary
+    isLandscape: boolean; 
 
     gamewidth: number;
     gameHeight: number;
@@ -36,21 +37,33 @@ export class Game extends Scene {
 
     create() {
         this.camera = this.cameras.main;
-        // Calculate scale factor based on aspect ratio
-        // const bgSpriteKey = this.isDeskTop ? 'desktopBg' : 'desktopBg';
-        this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'desktopBg').setOrigin(0.5);
+        
+        if(!this.isLandscape){
+            this.scale.setGameSize(720, 1600);
+            // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+            this.scale.refresh();
+        }
+
+        const bgSpriteKey = (this.isDeskTop || this.isLandscape) ? 'desktopBg' : 'mobileBg';
+        this.background = this.add.image(this.camera.centerX, this.camera.centerY, bgSpriteKey).setOrigin(0.5);
         this.background.setDepth(0);
         Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
 
-        // background element
-        this.frame = this.add.image(this.camera.centerX, this.camera.centerY - 65, 'video-frame').setDepth(4);
-        this.frame.setOrigin(0.5);
+        if(this.isLandscape){
+            this.frame = this.add.image(this.camera.centerX, this.camera.centerY - 65, 'video-frame').setDepth(4);
+            this.frame.setOrigin(0.5);
+        }
+        else{
+            this.mobileLogo = this.add.image(0, 0, 'mobile-logo').setOrigin(0.5).setDepth(1);
+            Display.Align.In.TopCenter(this.mobileLogo, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight), 0, 200)
+        }
+       
 
-        this.createLowerBox();
-        this.embedVideo();
+        // this.createLowerBox();
+        // this.embedVideo();
         this.createButtons();
 
-        this.checkOriention(this.scale.orientation);
+        // this.checkOriention(this.scale.orientation);
 
         // if (!this.isDeskTop) {
         //     if (this.isLandscape) {
@@ -65,7 +78,7 @@ export class Game extends Scene {
         const enterNowConfig = { id: 'enter-now-normal', x: 0, y: 0, depth: 4, scale: 0.125, frames: { texture: 'enter-now-normal', up: 'enter-now-normal', over: 'enter-now-overlay', down: 'enter-now-overlay' }, scaleX: 0.7, scaleY: 0.7 };
         const enterNowButton = new ImageButton(this, enterNowConfig, this.handleEnterNowButton);
         enterNowButton.setOrigin(0.5);
-        Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 0, 540);
+        Phaser.Display.Align.In.BottomCenter(enterNowButton, this.background, 5, 490);
     }
 
     private createLowerBox() {
@@ -130,6 +143,9 @@ export class Game extends Scene {
                 Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 50, -220);
                 console.log('orientation changed');
 
+            }
+            else {
+                this.background.setTexture('mobileBg');
             }
         }
     }

@@ -54,6 +54,8 @@ export class Preloader extends Scene {
 
         this.load.image('desktopBg', 'desktopBg.png');
         this.load.image('video-frame', 'frame.png');
+        this.load.image('mobile-logo', 'mobile-logo.png');
+        this.load.image('mobileBg', 'mobileBg.png');
 
         this.load.image('next-round', 'others/next-round.png');
         this.load.image('prize-pool', 'others/prize-pool.png');
