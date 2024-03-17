@@ -1,4 +1,4 @@
-import { GameObjects, Scene } from 'phaser';
+import { Display, GameObjects, Scene } from 'phaser';
 import { PhaserHelpers } from '../helpers';
 import { ImageButton } from '../helpers/ImageButton';
 
@@ -15,6 +15,9 @@ export class Game extends Scene {
     isDeskTop: boolean;
     isLandscape: boolean; // landscape-primary
 
+    gamewidth: number;
+    gameHeight: number;
+
     constructor() {
         super('Game');
     }
@@ -23,6 +26,9 @@ export class Game extends Scene {
         this.isDeskTop = this.sys.game.device.os.desktop;
         this.isLandscape = this.scale.orientation.toString() === Phaser.Scale.LANDSCAPE ? true : false;
         this.scale.on('orientationchange', this.checkOriention, this);
+
+        this.gamewidth = Number(this.game.config.width);
+        this.gameHeight = Number(this.game.config.height);
 
         console.log('isDesktop >> ', this.isDeskTop);
         console.log('isLandscape >> ', this.isLandscape);
@@ -34,17 +40,15 @@ export class Game extends Scene {
         // const bgSpriteKey = this.isDeskTop ? 'desktopBg' : 'desktopBg';
         this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'desktopBg').setOrigin(0.5);
         this.background.setDepth(0);
+        Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
 
-        // this.bottomPanel = this.add.image(0, 0, 'bottom-panel').setDepth(3);
-        // Phaser.Display.Align.In.BottomCenter(this.bottomPanel, this.background);
+        // background element
+        this.frame = this.add.image(this.camera.centerX, this.camera.centerY - 65, 'video-frame').setDepth(4);
+        this.frame.setOrigin(0.5);
 
-        // // background element
-        // this.frame = this.add.image(this.camera.centerX, this.camera.centerY - 65, 'video-frame').setDepth(4);
-        // this.frame.setOrigin(0.5);
-
-        // this.createLowerBox();
-        // this.embedVideo();
-        // this.createButtons();
+        this.createLowerBox();
+        this.embedVideo();
+        this.createButtons();
 
         // update orientation
         this.checkOriention(this.scale.orientation);
@@ -85,24 +89,26 @@ export class Game extends Scene {
     }
 
     private embedVideo() {
-        this.demoVideo = this.add.video(this.camera.centerX, this.camera.centerY, 'demo-video').setOrigin(0.5);
+        this.demoVideo = this.add.video(this.camera.centerX, this.camera.centerY + 10, 'demo-video').setOrigin(0.5);
         this.demoVideo.setInteractive();
         this.demoVideo.setLoop(true);
         this.demoVideo.setVolume(1);
         this.demoVideo.setDepth(1);
         this.demoVideo.play(true);
+        this.demoVideo.setScale(0.7);
 
         this.demoVideo.once('created', () => {
+            console.log(this.demoVideo.displayWidth)
+            const maskRect = this.add.rectangle(0, 0, this.demoVideo.displayWidth, this.demoVideo.displayHeight, 0x000000);
+            Phaser.Display.Align.In.BottomCenter(maskRect, this.frame, 0, -20);
+            // maskRect.setVisible(true);
+            const mask = maskRect.createGeometryMask();
+            this.demoVideo.setMask(mask);
             //  Resize the video stream to fit our monitor once the texture has been created
-            this.demoVideo.setDisplaySize(this.frame.width, this.frame.height).setVisible(true);
+            // this.demoVideo.setDisplaySize(this.frame.width, this.frame.height).setVisible(true);
         });
 
-        // const offsetX = (!this.isDeskTop && this.isLandscape === true) ? 330 : 330;
-        const maskRect = this.add.rectangle(0, 0, this.frame.width - 330, this.frame.height - 200, 0x000000);
-        Phaser.Display.Align.In.BottomCenter(maskRect, this.frame, -20);
-        maskRect.setVisible(true);
-        const mask = maskRect.createGeometryMask();
-        this.demoVideo.setMask(mask);
+        // // const offsetX = (!this.isDeskTop && this.isLandscape === true) ? 330 : 330;
     }
 
     handleEnterNowButton() {
@@ -127,10 +133,10 @@ export class Game extends Scene {
                 this.frame.setDisplaySize(1500, this.frame.displayHeight);
                 this.demoVideo.setDisplaySize(this.frame.displayWidth, this.frame.displayHeight);
                 console.log(this.frame.displayWidth / this.frame.displayHeight);
-                
+
                 Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 10, -220);
                 Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 10, -220);
-               
+
             }
         }
 
