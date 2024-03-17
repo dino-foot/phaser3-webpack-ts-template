@@ -14,7 +14,7 @@ export class Game extends Scene {
     nextRoundContainer: GameObjects.Container;
     demoVideo: GameObjects.Video;
     isDeskTop: boolean;
-    isLandscape: boolean; 
+    isLandscape: boolean;
 
     gamewidth: number;
     gameHeight: number;
@@ -37,8 +37,8 @@ export class Game extends Scene {
 
     create() {
         this.camera = this.cameras.main;
-        
-        if(!this.isLandscape){
+
+        if (!this.isLandscape) {
             this.scale.setGameSize(720, 1600);
             // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
             this.scale.refresh();
@@ -49,18 +49,14 @@ export class Game extends Scene {
         this.background.setDepth(0);
         Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
 
-        if(this.isLandscape){
-            this.frame = this.add.image(this.camera.centerX, this.camera.centerY - 65, 'video-frame').setDepth(4);
-            this.frame.setOrigin(0.5);
-        }
-        else{
-            this.mobileLogo = this.add.image(0, 0, 'mobile-logo').setOrigin(0.5).setDepth(1);
-            Display.Align.In.TopCenter(this.mobileLogo, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight), 0, 200)
-        }
-       
+        const frameKey = this.isLandscape ? 'video-frame' : 'mobile-frame';
+        const offsetY = this.isLandscape ? -65 : 185;
+        this.frame = this.add.image(this.camera.centerX, this.camera.centerY + offsetY, frameKey).setDepth(4);
+        this.frame.setOrigin(0.5);
 
-        // this.createLowerBox();
-        // this.embedVideo();
+
+        this.createLowerBox();
+        this.embedVideo();
         this.createButtons();
 
         // this.checkOriention(this.scale.orientation);
@@ -101,22 +97,23 @@ export class Game extends Scene {
     }
 
     private embedVideo() {
-        this.demoVideo = this.add.video(this.camera.centerX, this.camera.centerY + 10, 'demo-video').setOrigin(0.5);
+        const offsetY = this.isLandscape ? 10 : 160;
+        this.demoVideo = this.add.video(this.camera.centerX, this.camera.centerY + offsetY, 'demo-video').setOrigin(0.5);
         this.demoVideo.setInteractive();
         this.demoVideo.setLoop(true);
         this.demoVideo.setVolume(1);
         this.demoVideo.setDepth(1);
         this.demoVideo.play(true);
-        this.demoVideo.setScale(0.7);
+        this.demoVideo.setScale(this.isLandscape ? 0.7 : 0.35);
 
-        this.demoVideo.once('created', () => {
-            console.log(this.demoVideo.displayWidth)
-            const maskRect = this.add.rectangle(0, 0, this.demoVideo.displayWidth, this.demoVideo.displayHeight, 0x000000);
-            Phaser.Display.Align.In.BottomCenter(maskRect, this.frame, 0, -20);
-            // maskRect.setVisible(true);
-            const mask = maskRect.createGeometryMask();
-            this.demoVideo.setMask(mask);
-        });
+        // this.demoVideo.once('created', () => {
+        //     console.log(this.demoVideo.displayWidth)
+        //     const maskRect = this.add.rectangle(0, 0, this.demoVideo.displayWidth, this.demoVideo.displayHeight, 0x000000);
+        //     Phaser.Display.Align.In.BottomCenter(maskRect, this.frame, 0, -20);
+        //     // maskRect.setVisible(true);
+        //     const mask = maskRect.createGeometryMask();
+        //     this.demoVideo.setMask(mask);
+        // });
 
         // // const offsetX = (!this.isDeskTop && this.isLandscape === true) ? 330 : 330;
     }
@@ -132,7 +129,7 @@ export class Game extends Scene {
             if (this.isLandscape) {
                 // this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
                 // this.scale.refresh();
-                
+
                 // this.frame.setDisplaySize(1500, this.frame.displayHeight);
                 // this.demoVideo.setDisplaySize(this.frame.displayWidth, this.frame.displayHeight);
                 // console.log(this.frame.displayWidth / this.frame.displayHeight);
