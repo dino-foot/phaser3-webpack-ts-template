@@ -54,13 +54,13 @@ export class Game extends Scene {
 
     create() {
         this.camera = this.cameras.main;
-        
+
         this.createBackground();
         this.createFrame();
 
-        // this.createLowerBox();
-        // this.embedVideo();
-        // this.createButtons();
+        this.createLowerBox();
+        this.embedVideo();
+        this.createButtons();
         this.checkOrientation(this.scale.orientation);
     }
 
@@ -112,42 +112,39 @@ export class Game extends Scene {
     checkOrientation(orientation) {
         this.isLandscape = orientation === Scale.Orientation.LANDSCAPE;
 
-        if(this.currentOrienation !== orientation){
+        if (this.currentOrienation !== orientation) {
             this.currentOrienation = this.scale.orientation;
             this.updateGameSize();
             this.scale.refresh();
-            
+
             // redraw 
             this.cleanupLayout();
+            this.cameras.main.fadeIn(800, 0, 0, 0);
+
             this.createBackground();
             this.createFrame();
+            this.createLowerBox();
+            this.embedVideo();
+            this.createButtons();
         }
-        
-        console.log('orienation ', this.isLandscape);
-        
-        // const bgSpriteKey = (this.isDeskTop || this.isLandscape) ? 'desktopBg' : 'mobileBg';
-        // const frameKey = this.isLandscape ? 'video-frame' : 'mobile-frame';
-        // const frameOffsetY = this.isLandscape ? -65 : 185;
 
-        // this.frame.setTexture(frameKey);
-        // this.frame.setY(this.camera.centerY + frameOffsetY);
-        // this.background.setTexture(bgSpriteKey);
+        console.log('orienation ', this.isLandscape);
 
         if (!this.isDeskTop && this.isLandscape) {
             // console.log('landscape');
-            // this.prizePoolContainer.setScale(0.75);
-            // this.nextRoundContainer.setScale(0.75);
-            // Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 30, -220);
-            // Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 50, -220);
+            this.prizePoolContainer.setScale(0.75);
+            this.nextRoundContainer.setScale(0.75);
+            Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.background, 30, -220);
+            Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.background, 50, -220);
         } else {
             // console.log('portrait');
-            // this.prizePoolContainer.setScale(0.75).setDepth(4);
-            // this.nextRoundContainer.setScale(0.75).setDepth(4);
-            // Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, 10, 210);
-            // Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, 0, 210);
+            this.prizePoolContainer.setScale(0.75).setDepth(4);
+            this.nextRoundContainer.setScale(0.75).setDepth(4);
+            Phaser.Display.Align.In.BottomRight(this.prizePoolContainer, this.frame, 10, 210);
+            Phaser.Display.Align.In.BottomLeft(this.nextRoundContainer, this.frame, 0, 210);
         }
 
-        
+
         this.scale.refresh();
     }
 
@@ -159,8 +156,7 @@ export class Game extends Scene {
         this.demoVideo?.destroy();
     }
 
-    onResize (gameSize, baseSize, displaySize, resolution)
-    {
+    onResize(gameSize, baseSize, displaySize, resolution) {
         // const width = gameSize.width;
         // const height = gameSize.height;
         // this.cameras.resize(width, height);
