@@ -2,6 +2,7 @@ import { Scene, Cameras, Display, GameObjects, Scale } from 'phaser';
 import { PhaserHelpers } from '../helpers';
 import { ImageButton } from '../helpers/ImageButton';
 import { EventsController } from '../controllers/eventsController';
+import PieIndicator from '../helpers/PieIndicator';
 
 export class Game extends Scene {
     camera: Cameras.Scene2D.Camera;
@@ -47,8 +48,13 @@ export class Game extends Scene {
     create() {
         this.camera = this.cameras.main;
 
-        this.createBackground();
-        this.checkOrientation(this.scale.orientation);
+        const config = {x: this.camera.centerX, y: this.camera.centerY, alpha: 1, radius: 80};
+        const indicator = new PieIndicator(this, config);
+        console.log(indicator);
+        indicator.startTick();
+
+        // this.createBackground();
+        // this.checkOrientation(this.scale.orientation);
     }
 
     private createBackground() {
