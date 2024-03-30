@@ -1,6 +1,6 @@
 import { Display, GameObjects, Scene } from "phaser";
 
-export default class PieIndicator extends Phaser.GameObjects.Graphics {
+export default class PieTimer extends Phaser.GameObjects.Graphics {
     declare x: number; // x position
     declare y: number; // y position
     declare alpha: number; // alpha

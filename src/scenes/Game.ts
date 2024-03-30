@@ -2,7 +2,7 @@ import { Scene, Cameras, Display, GameObjects, Scale } from 'phaser';
 import { PhaserHelpers } from '../helpers';
 import { ImageButton } from '../helpers/ImageButton';
 import { EventsController } from '../controllers/eventsController';
-import PieIndicator from '../helpers/PieIndicator';
+import PieTimer from '../helpers/PieIndicator';
 
 export class Game extends Scene {
     camera: Cameras.Scene2D.Camera;
@@ -49,8 +49,7 @@ export class Game extends Scene {
         this.camera = this.cameras.main;
 
         const config = {x: this.camera.centerX, y: this.camera.centerY, alpha: 1, radius: 80};
-        const indicator = new PieIndicator(this, config);
-        console.log(indicator);
+        const indicator = new PieTimer(this, config);
         indicator.startTick();
 
         // this.createBackground();
