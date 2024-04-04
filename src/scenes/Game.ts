@@ -1,8 +1,5 @@
 import { Scene, Cameras, Display, GameObjects, Scale } from 'phaser';
-import { PhaserHelpers } from '../helpers';
-import { ImageButton } from '../helpers/ImageButton';
-import { EventsController } from '../controllers/eventsController';
-import PieTimer from '../helpers/PieIndicator';
+import PieTimer from '../helpers/PieTimer';
 
 export class Game extends Scene {
     camera: Cameras.Scene2D.Camera;
@@ -47,13 +44,6 @@ export class Game extends Scene {
 
     create() {
         this.camera = this.cameras.main;
-
-        const config = {x: this.camera.centerX, y: this.camera.centerY, alpha: 1, radius: 80};
-        const indicator = new PieTimer(this, config);
-        indicator.startTick();
-
-        // this.createBackground();
-        // this.checkOrientation(this.scale.orientation);
     }
 
     private createBackground() {
@@ -88,13 +78,5 @@ export class Game extends Scene {
         //     console.log('Portrait mode');
         //     // Additional actions for portrait mode
         // }
-    }
-
-    private addText(text: string, x: number, y: number) {
-        return this.add.text(x, y, text, {
-            fontFamily: 'Roboto-Medium',
-            fontSize: 50,
-            color: '#ffffff',
-        }).setOrigin(0.5).setDepth(2).setInteractive();
     }
 }

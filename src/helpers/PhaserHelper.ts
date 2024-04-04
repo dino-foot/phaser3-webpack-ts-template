@@ -2,7 +2,7 @@ import * as Phaser from 'phaser';
 import { RectData, TextObject } from '../types';
 
 export class PhaserHelpers {
-   
+
     constructor() { }
 
     static createContainer(scene: Phaser.Scene, width: number, height: number, debugFill?: boolean): Phaser.GameObjects.Container {
@@ -59,9 +59,22 @@ export class PhaserHelpers {
         return graphics;
     }
 
+    static addSimpleText(text: string, x: number, y: number, context: Phaser.Scene) {
+        return context.add.text(x, y, text, {
+            fontFamily: "Roboto-Medium",
+            fontSize: 50,
+            color: "#ffffff",
+            stroke: '#334455',
+            strokeThickness: 6
+        })
+            .setOrigin(0.5)
+            .setDepth(2)
+            .setInteractive();
+    }
+
     static addText(textData: TextObject, context: Phaser.Scene): Phaser.GameObjects.Text {
         const { x, y, text, style, origin, angle, wordWrapWidth, lineHeight, depth, isInterActive } = textData;
-    
+
         const textStyle = style || null;
         const textObject = context.add.text(x || 0, y || 0, text || '', textStyle);
         if (origin) textObject.setOrigin(origin.x, origin.y);
@@ -70,9 +83,9 @@ export class PhaserHelpers {
         if (lineHeight != null) textObject.setLineSpacing(lineHeight);
         if (isInterActive != null) textObject.setInteractive();
         if (depth) textObject.depth = depth;
-    
+
         return textObject;
-      }
+    }
 
     static destroyAll(items: Phaser.GameObjects.GameObject[]): void {
         items.forEach((item) => item.destroy());
