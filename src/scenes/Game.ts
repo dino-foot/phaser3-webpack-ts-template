@@ -44,7 +44,6 @@ export class Game extends Scene {
 
     create() {
         this.camera = this.cameras.main;
-        this.createBackground();
     }
 
     private createBackground() {
