@@ -11,8 +11,9 @@ export class Preloader extends Scene {
     }
 
     addLoadingBar() {
-        const logo = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY - 150, 'logo');
-        logo.setOrigin(0.5);
+        // const logo = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY - 200, 'logo');
+        // logo.setScale(0.2);
+        // logo.setOrigin(0.5);
 
         const { width } = this.cameras.main;
         const { height } = this.cameras.main;
