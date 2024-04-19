@@ -1,5 +1,4 @@
 import { Scene, Cameras, Display, GameObjects, Scale } from 'phaser';
-import PieTimer from '../helpers/PieTimer';
 
 export class Game extends Scene {
     camera: Cameras.Scene2D.Camera;

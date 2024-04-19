@@ -10,10 +10,10 @@ export class MainMenu extends Scene {
     }
 
     create() {
-        
+
         this.background = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'background');
         this.background.setOrigin(0.5);
-        
+
         this.input.once('pointerdown', () => {
             this.scene.start('Game');
         });
