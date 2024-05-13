@@ -48,7 +48,7 @@ const config: Types.Core.GameConfig = {
                 y: 1,
                 x: 0
             },
-            debug: matterDebugConfig
+            debug: false
         }
     },
     scale: {
