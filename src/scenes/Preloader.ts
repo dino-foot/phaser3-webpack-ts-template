@@ -50,6 +50,14 @@ export class Preloader extends Scene {
         this.load.setPath('assets');
 
         this.load.image('background', 'bg.png');
+
+        this.load.image("logo", "blackjack/phaser-large.png");
+        this.load.image("spade", "blackjack/spade.png");
+        this.load.image("club", "blackjack/club.png");
+        this.load.image("heart", "blackjack/heart.png");
+        this.load.image("diamond", "blackjack/diamond.png");
+        this.load.image("card_bg", "blackjack/card_bg.png");
+        this.load.image("card_front", "blackjack/card_front.png");
     }
 
     create() { }

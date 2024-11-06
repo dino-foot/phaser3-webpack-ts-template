@@ -1,4 +1,5 @@
 import { Scene, Cameras, Display, GameObjects, Scale } from 'phaser';
+import { Deck } from '../helpers';
 
 export class Game extends Scene {
     camera: Cameras.Scene2D.Camera;
@@ -18,6 +19,10 @@ export class Game extends Scene {
     create() {
         this.camera = this.cameras.main;
         this.createBackground();
+
+        this.add.text(10, 20, `Phaser v${Phaser.VERSION}`);
+        const deck = new Deck(this);
+        deck.stackDeck(300, 300);
     }
 
     private createBackground() {
@@ -25,3 +30,6 @@ export class Game extends Scene {
         Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
     }
 }
+
+// https://phaser.io/sandbox/MCrRX8zp
+
