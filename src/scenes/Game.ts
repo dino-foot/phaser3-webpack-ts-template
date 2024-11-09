@@ -4,6 +4,7 @@ import { Deck } from '../helpers';
 export class Game extends Scene {
     camera: Cameras.Scene2D.Camera;
     background: GameObjects.Image;
+    table: GameObjects.Image;
     gamewidth: number;
     gameHeight: number;
 
@@ -28,6 +29,9 @@ export class Game extends Scene {
     private createBackground() {
         this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'background').setOrigin(0.5).setDepth(0);
         Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
+
+        this.table = this.add.image(this.camera.centerX, this.camera.centerY + 200, 'table').setOrigin(0.5).setDepth(1);
+        this.table.setScale(0.75);
     }
 }
 
