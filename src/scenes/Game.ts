@@ -30,7 +30,10 @@ export class Game extends Scene {
         this.background = this.add.image(this.camera.centerX, this.camera.centerY, 'background').setOrigin(0.5).setDepth(0);
         Display.Align.In.Center(this.background, this.add.zone(this.camera.centerX, this.camera.centerY, this.gamewidth, this.gameHeight));
 
-        this.table = this.add.image(this.camera.centerX, this.camera.centerY + 200, 'table').setOrigin(0.5).setDepth(1);
+        const dealer = this.add.image(this.camera.centerX, this.camera.centerY - 300, 'dealer').setOrigin(0.5).setDepth(1);
+        dealer.setScale(0.75);
+
+        this.table = this.add.image(this.camera.centerX, this.camera.centerY + 200, 'table').setOrigin(0.5).setDepth(2);
         this.table.setScale(0.75);
     }
 }

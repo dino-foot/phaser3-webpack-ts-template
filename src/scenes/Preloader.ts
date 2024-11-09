@@ -59,6 +59,7 @@ export class Preloader extends Scene {
         this.load.image("card_bg", "blackjack/card_bg.png");
         this.load.image("card_front", "blackjack/card_front.png");
         this.load.image("background", "blackjack/bg.png");
+        this.load.image("dealer", "blackjack/dealer.png");
         this.load.image("table", "blackjack/table.png");
     }
 
